@@ -1,11 +1,11 @@
 {
   "name": "graphql-mongoose-subscriptions",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A graphql-subscriptions PubSub Engine using mongoose",
   "main": "src/index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Nickolasmv/graphql-mongoose-subscriptions.git"
+    "url": "git+https://github.com/Nickolasmv/graphql-mongoose-subscriptions.git"
   },
   "keywords": [
     "graphql",

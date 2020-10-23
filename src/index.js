@@ -1,1 +1,1 @@
-export { MongodbPubSub } from './mongodb-pubsub';
+module.exports = { MongodbPubSub: require("./mongodb-pubsub").MongodbPubSub };
