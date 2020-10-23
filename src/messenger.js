@@ -15,9 +15,9 @@ function Messenger(options) {
   if (o.mongooseOptions) {
     this.mongooseOptions = o.mongooseOptions;
   }
-  this.mongoose = o.mongoose || require('mongoose');
-
-  const MessageSchema = new mongoose.Schema({
+  const mongoose = o.mongoose || require('mongoose');
+  this.mongoose = mongoose;
+  const MessageSchema = new this.mongoose.Schema({
     channel: String,
     createdAt: { type: Date, expires: 3600, default: Date.now },
     message: mongoose.Schema.Types.Mixed,
