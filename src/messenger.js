@@ -19,7 +19,7 @@ function Messenger(options) {
   this.mongoose = mongoose;
   const MessageSchema = new this.mongoose.Schema({
     channel: String,
-    createdAt: { type: Date, expires: 3600, default: Date.now },
+    createdAt: { type: Date, default: Date.now },
     message: mongoose.Schema.Types.Mixed,
   }, {
     capped: {
