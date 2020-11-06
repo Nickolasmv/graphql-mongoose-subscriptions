@@ -17,6 +17,12 @@ function Messenger(options) {
   }
   const mongoose = o.mongoose || require('mongoose');
   this.mongoose = mongoose;
+
+  mongoose.connection.db.dropCollection("pubsubmessage", function (
+    err,
+    result
+  ) {
+  });
   const MessageSchema = new this.mongoose.Schema({
     channel: String,
     createdAt: { type: Date, default: Date.now },
