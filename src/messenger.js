@@ -18,7 +18,7 @@ function Messenger(options) {
   const mongoose = o.mongoose || require('mongoose');
   this.mongoose = mongoose;
 
-  mongoose.connection.db.dropCollection("pubsubmessage", function (
+  mongoose.connection.dropCollection("pubsubmessage", function (
     err,
     result
   ) {
