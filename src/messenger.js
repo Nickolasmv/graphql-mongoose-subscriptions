@@ -18,20 +18,10 @@ function Messenger(options) {
   const mongoose = o.mongoose || require('mongoose');
   this.mongoose = mongoose;
 
-  mongoose.connection.dropCollection("pubsubmessage", function (
-    err,
-    result
-  ) {
-  });
   const MessageSchema = new this.mongoose.Schema({
     channel: String,
-    createdAt: { type: Date, default: Date.now },
+    createdAt: { type: Date, expires: '15s', default: Date.now },
     message: mongoose.Schema.Types.Mixed,
-  }, {
-    capped: {
-      size: 1024 * 16 * 25, // in bytes
-      autoIndexId: true
-    }
   });
   this.Message = mongoose.models['PubSubMessage'] || mongoose.model('PubSubMessage', MessageSchema);
   this.subscribed = {};
