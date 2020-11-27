@@ -53,8 +53,8 @@ Messenger.prototype.connect = function (callback) {
 
   stream.on('change', function data(doc) {
     const { fullDocument } = doc;
-    self.lastMessageTimestamp = fullDocument.createdAt;
-    if (self.subscribed[fullDocument.channel]) {
+    if (fullDocument && self.subscribed[fullDocument.channel] && self.lastMessageTimestamp != fullDocument.createdAt) {
+      self.lastMessageTimestamp = fullDocument.createdAt;
       self.emit(fullDocument.channel, fullDocument.message);
     }
   });
@@ -67,7 +67,7 @@ Messenger.prototype.connect = function (callback) {
 
   stream.on('close', function streamError() {
     stream.destroy();
-    self.connect();
+    // self.connect();
   });
 
   if (callback) callback();
