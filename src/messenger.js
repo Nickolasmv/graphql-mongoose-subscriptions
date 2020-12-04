@@ -25,6 +25,7 @@ function Messenger(options) {
   });
   this.Message = mongoose.models['PubSubMessage'] || mongoose.model('PubSubMessage', MessageSchema);
   this.subscribed = {};
+  this.lastMessageId = null;
   this.lastMessageTimestamp = null;
   this.startingMessageTimestamp = new Date();
   this.retryInterval = o.retryInterval || 100;
@@ -53,7 +54,8 @@ Messenger.prototype.connect = function (callback) {
 
   stream.on('change', function data(doc) {
     const { fullDocument } = doc;
-    if (fullDocument && self.subscribed[fullDocument.channel] && self.lastMessageTimestamp != fullDocument.createdAt) {
+    if (fullDocument && self.subscribed[fullDocument.channel] && self.lastMessageId != fullDocument._id) {
+      self.lastMessageId = fullDocument._id;
       self.lastMessageTimestamp = fullDocument.createdAt;
       self.emit(fullDocument.channel, fullDocument.message);
     }
@@ -67,7 +69,7 @@ Messenger.prototype.connect = function (callback) {
 
   stream.on('close', function streamError() {
     stream.destroy();
-    // self.connect();
+    self.connect();
   });
 
   if (callback) callback();
