@@ -50,7 +50,15 @@ Messenger.prototype.connect = function (callback) {
   if (this.mongoose.connection.readyState == 0 && self.mongooseOptions) {
     this.mongoose.connect(self.mongooseOptions.url, self.mongooseOptions.options)
   }
-  var stream = this.Message.watch();// .on('change', change => console.log(change));
+
+   const pipeline = [
+    {
+      $match: {
+        $or: [{ operationType: 'insert' }],
+      },
+    },
+  ];
+  var stream = this.Message.watch(pipeline, { fullDocument: 'updateLookup' });   
 
   stream.on('change', function data(doc) {
     const { fullDocument } = doc;
@@ -63,12 +71,14 @@ Messenger.prototype.connect = function (callback) {
 
   // reconnect on error
   stream.on('error', function streamError() {
-    stream.destroy();
+    if (stream && stream.destroy)
+      stream.destroy();
     self.connect();
   });
 
   stream.on('close', function streamError() {
-    stream.destroy();
+    if (stream && stream.destroy)
+      stream.destroy();
     self.connect();
   });
 

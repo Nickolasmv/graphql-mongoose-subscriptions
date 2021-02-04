@@ -10,11 +10,11 @@ export class MongodbPubSub extends PubSub  {
     const { commonMessageHandler } = options;
     super();
     this.ee = new Messenger(options);
-    this.ee.connect();
     this.subscriptions = {};
     this.subIdCounter = 0;
     this.commonMessageHandler =
-      commonMessageHandler || defaultCommonMessageHandler;
+    commonMessageHandler || defaultCommonMessageHandler;
+    this.ee.connect();
   }
    async publish(triggerName, payload) {
    this.ee.send(triggerName, payload);
