@@ -73,13 +73,17 @@ Messenger.prototype.connect = function (callback) {
   stream.on('error', function streamError() {
     if (stream && stream.destroy)
       stream.destroy();
-    self.connect();
+    setTimeout(function()  {       
+      self.connect();
+      },5000)
   });
 
   stream.on('close', function streamError() {
     if (stream && stream.destroy)
       stream.destroy();
-    self.connect();
+    setTimeout(function(){        
+      self.connect();
+      },5000)
   });
 
   if (callback) callback();
