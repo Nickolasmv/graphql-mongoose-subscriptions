@@ -1,6 +1,6 @@
 {
   "name": "graphql-mongoose-subscriptions",
-  "version": "1.0.15",
+  "version": "1.0.16",
   "description": "A graphql-subscriptions PubSub Engine using mongoose",
   "main": "dist/index.js",
   "repository": {
