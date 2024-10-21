@@ -33,7 +33,7 @@ function Messenger(options) {
 
 util.inherits(Messenger, EventEmitter);
 
-Messenger.prototype.send = function (channel, msg, callback) {
+Messenger.prototype.send = async function (channel, msg, callback) {
   var cb = function noop() { };
   if (typeof callback === 'function') {
     cb = callback;
@@ -42,7 +42,12 @@ Messenger.prototype.send = function (channel, msg, callback) {
     channel: channel,
     message: msg
   });
-  message.save(cb);
+  try {
+    await message.save();
+    cb(message)
+  } catch (e) {
+    cb(e)
+  }
 };
 
 Messenger.prototype.connect = function (callback) {
@@ -51,14 +56,14 @@ Messenger.prototype.connect = function (callback) {
     this.mongoose.connect(self.mongooseOptions.url, self.mongooseOptions.options)
   }
 
-   const pipeline = [
+  const pipeline = [
     {
       $match: {
         $or: [{ operationType: 'insert' }],
       },
     },
   ];
-  var stream = this.Message.watch(pipeline, { fullDocument: 'updateLookup' });   
+  var stream = this.Message.watch(pipeline, { fullDocument: 'updateLookup' });
 
   stream.on('change', function data(doc) {
     const { fullDocument } = doc;
@@ -74,18 +79,18 @@ Messenger.prototype.connect = function (callback) {
     if (stream && stream.destroy)
       stream.destroy();
     stream = null;
-    setTimeout(function()  {       
+    setTimeout(function () {
       self.connect();
-      },10000)
+    }, 10000)
   });
 
   stream.on('close', function streamError() {
     if (stream && stream.destroy)
       stream.destroy();
     stream = null;
-    setTimeout(function(){        
+    setTimeout(function () {
       self.connect();
-      },10000)
+    }, 10000)
   });
 
   if (callback) callback();
